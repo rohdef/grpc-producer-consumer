@@ -1,0 +1,21 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.google.api.grpc:proto-google-common-protos:2.51.0=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.code.findbugs:jsr305:3.0.2=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.errorprone:error_prone_annotations:2.30.0=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.guava:failureaccess:1.0.2=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.guava:guava:33.3.1-android=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.j2objc:j2objc-annotations:3.0.0=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.protobuf:protobuf-java:3.25.5=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.protobuf:protoc:3.25.5=protobufToolsLocator_protoc
+io.grpc:grpc-api:1.71.0=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+io.grpc:grpc-protobuf-lite:1.71.0=compileProtoPath,runtimeClasspath,testCompileProtoPath,testRuntimeClasspath
+io.grpc:grpc-protobuf:1.71.0=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+io.grpc:grpc-stub:1.71.0=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+io.grpc:protoc-gen-grpc-java:1.71.0=protobufToolsLocator_grpc
+org.apache.tomcat:annotations-api:6.0.53=compileClasspath,compileProtoPath
+org.checkerframework:checker-qual:3.43.0=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+org.codehaus.mojo:animal-sniffer-annotations:1.24=compileClasspath,compileProtoPath,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+empty=annotationProcessor,protobuf,testAnnotationProcessor,testProtobuf
