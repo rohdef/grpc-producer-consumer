@@ -108,6 +108,8 @@ jobs:
           name: consumer
           path: consumer
 
+      - name: Log in to docker registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Build docker container
         id: build-container
         uses: rohdef/action-build-scan-push-container@main
