@@ -1,0 +1,157 @@
+name: Building and distributing Danske Bansk services
+run-name: rfbpa - ${{ github.actor }} on ${{ github.ref }}
+on: [ push ]
+
+jobs:
+  code-scan:
+    permissions:
+      contents: read
+      security-events: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Check out repository: ${{ github.repository }}"
+        uses: actions/checkout@v4
+
+      - name: Scan code for vulnerabilities
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: "fs"
+          format: "sarif"
+          output: "code-scan-results.sarif"
+
+      - name: Upload code scan to Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'code-scan-results.sarif'
+          category: code-scan
+
+  build:
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+      security-events: write
+    runs-on: ubuntu-latest
+    outputs:
+      # This would be used in a CD flow - omitted for this assignment
+      docker_digest: ${{ steps.push_image.outputs.docker_digest }}
+    steps:
+      - name: "Check out repository: ${{ github.repository }}"
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 23
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          add-job-summary: on-failure
+          add-job-summary-as-pr-comment: on-failure
+
+      - name: Build consumer and producer
+        run: |
+          ./gradlew build --scan
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: producer
+          path: producer
+      - uses: actions/upload-artifact@v4
+        with:
+          name: consumer
+          path: consumer
+
+
+
+  build-scan-push-producer:
+    needs:
+      - build
+    permissions:
+      contets: read
+      packages: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: producer
+          path: producer
+
+      - name: Log in to docker registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build docker container
+        id: build-container
+        uses: rohdef/action-build-scan-push-container@main
+        with:
+          dockerfile-path: ./producer/
+          labels: |
+            org.opencontainers.image.authors=Rohde Fischer (rohdef@rohdef.dk)
+            org.opencontainers.image.vendor=Rohde Fischer
+            org.opencontainers.image.ref.name=producer-1
+            org.opencontainers.image.title=Service A - The Producer
+            org.opencontainers.image.description=A producer of gRPC messages
+          destination-image-names: |
+            - rohdef/danske-bank-producer
+
+  build-scan-push-consumer:
+    needs:
+      - build
+    permissions:
+      contets: read
+      packages: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: consumer
+          path: consumer
+
+      - name: Build docker container
+        id: build-container
+        uses: rohdef/action-build-scan-push-container@main
+        with:
+          dockerfile-path: ./consumer/
+          labels: |
+            org.opencontainers.image.authors=Rohde Fischer (rohdef@rohdef.dk)
+            org.opencontainers.image.vendor=Rohde Fischer
+            org.opencontainers.image.ref.name=consumer-1
+            org.opencontainers.image.title=Service B - The Consumer
+            org.opencontainers.image.description=A consumer of gRPC messages
+          destination-image-names: |
+            - rohdef/danske-bank-consumer
+
+          #  deployment:
+          #    needs:
+          #      - build-scan-push-producer
+          #      - build-scan-push-consumer
+          #    permissions:
+          #      contents: read
+          #      packages: write
+          #    runs-on: ubuntu-latest
+          #    env:
+          #      PRODUCER_DIGEST: ${{ needs.build-scan-push-containers.outputs.producer-digest }}
+          #      CONSUMER_DIGEST: ${{ needs.build-scan-push-containers.outputs.consumer-digest }}
+          #    steps:
+          #      - name: "Check out repository: ${{ github.repository }}"
+          #        uses: actions/checkout@v4
+          #        with:
+          #          path: source
+          #      - name: Check out gitops repository
+          #        uses: actions/checkout@v4
+          #        with:
+          #          path: deployment
+          #          repository: rohdef/imagined-deployment-repository
+          #          ssh-key: ${{ secrets.DANSKE_BANK_DEPLOY_SSH_KEY }}
+          #      - name: Update deployment
+          #        run: |
+          #          rm -rf ./imagined-deployment-repository/services
+          #          cp -r ./source/deployment/ ./imagined-deployment-repository/services
+          #          yq e -i ".producer.image=\"${PRODUCER_DIGEST}\"" ./imagined-deployment-repository/services/values.yaml
+          #          yq e -i ".consumer.image=\"${CONSUMER_DIGIEST}\"" ./imagined-deployment-repository/services/values.yaml
+          #          cd imagined-deployment-repository
+          #          git config user.email "rohdef+danske+bank@rohdef.dk"
+          #          git config user.name "${{ github.actor }}"
+          #          git add .
+          #          git commit --allow-empty -m "Updating deployment"
+          #          git push
