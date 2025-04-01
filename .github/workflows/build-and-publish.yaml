@@ -54,7 +54,7 @@ jobs:
 
       - name: Build consumer and producer
         run: |
-          ./gradlew build --scan
+          ./gradlew build --scan --info
 
       - uses: actions/upload-artifact@v4
         with:
