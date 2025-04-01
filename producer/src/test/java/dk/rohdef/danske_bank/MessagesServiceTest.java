@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CakeFactoryServiceTest {
+class MessagesServiceTest {
     @Test
     public void testFoo() {
         assertThat("a").isEqualTo("a");

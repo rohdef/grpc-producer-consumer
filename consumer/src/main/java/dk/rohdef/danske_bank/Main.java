@@ -24,11 +24,13 @@ public class Main {
                 .build();
 
         try {
-            CakeClient client = new CakeClient(channel);
-            CountDownLatch countDownLatch = client.greet("Danske Bank - Core Payments");
+            MessagesClient client = new MessagesClient(channel);
+            CountDownLatch countDownLatch = client.messages();
             countDownLatch.await();
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
+
+        logger.info("Channel ended, closing...");
     }
 }

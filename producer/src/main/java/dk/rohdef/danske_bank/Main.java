@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
         logger.info("Hello, I am Service A; I am the producer!");
 
-        FoodServer server = new FoodServer(50051);
+        MessagesServer server = new MessagesServer(50051);
         server.blockUntilShutdown();
     }
 }

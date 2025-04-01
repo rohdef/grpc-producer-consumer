@@ -1,9 +1,9 @@
 services:
   producer:
-    image:  ghcr.io/rohdef/danske-bank-producer:latest
+    build: ./producer
     ports:
       - "50051:50051"
   consumer:
-    image: ghcr.io/rohdef/danske-bank-consumer:latest
+    build: ./consumer
     environment:
       PRODUCER_HOST: producer

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package danske_bank;
+
+import "google/protobuf/empty.proto";
+
+option java_package = "dk.rohdef.danske_bank";
+option java_multiple_files = true;
+
+service Messages {
+  rpc GetMessages(google.protobuf.Empty) returns  (stream MessageResponse) {}
+}
+
+message MessageResponse {
+  string id = 1;
+  string timestamp = 2;
+  string generated = 3;
+}
