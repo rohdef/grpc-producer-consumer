@@ -57,5 +57,8 @@ Port configuration in that case is only relevant for local development (ports ca
 This solution simulates a large part of an CI/CD pipeline, however omitting the CD part.
 The setup runs through a simple security scan - and allowed me to show off a private GitHub action for building and scanning docker containers.
 
+Tests are just dummies, but used to display a pattern I like to making them readable and close to the domain.
+The tests are combined with a gradle plugin for displaying them nicely, making them more useful if the before           mentioned pattern is desired.
+
 Currently there's no fault tolerance apart from gRPC offers out of the box.
 This could include retry logic with a backoff, having data caps etc.
