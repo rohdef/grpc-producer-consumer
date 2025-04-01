@@ -4,14 +4,17 @@
 
 ```bash
 ./gradlew clean build
-docker build -t producer:latest ./producer
-docker build -t consumer:latest ./consumer
+docker build -t ghcr.io/rohdef/danske-bank-producer:latest ./producer
+docker build -t ghcr.io/rohdef/danske-bank-consumer:latest ./consumer
 ```
 
 
 ## Pulling docker images from GHCR
-TBD
 
+```bash
+docker pull ghcr.io/rohdef/danske-bank-producer:latest
+docker pull ghcr.io/rohdef/danske-bank-consumer:latest
+```
 
 ## Running
 
@@ -19,8 +22,8 @@ TBD
 
 ```bash
 docker network create danske_bank_rohdef
-docker run --rm --name producer --net danske_bank_rohdef producer:latest
-docker run --rm --name consumer --net danske_bank_rohdef -e PRODUCER_HOST=producer consumer:latest
+docker run --rm --name producer --net danske_bank_rohdef danske-bank-producer:latest
+docker run --rm --name consumer --net danske_bank_rohdef -e PRODUCER_HOST=producer docker pull ghcr.io/rohdef/danske-bank-consumer:latest
 ```
 
 Remember to remove the network after use by running:
@@ -31,7 +34,7 @@ docker network rm danske_bank_rohdef
 
 
 ### Docker compose
-
+    
 TBD
 
 
