@@ -35,7 +35,9 @@ docker network rm danske_bank_rohdef
 
 ### Docker compose
     
-TBD
+```bash
+docker compose up
+```
 
 
 ## Project structure
@@ -43,3 +45,17 @@ TBD
 - [protocol](./protocol) - the protocol definition and generated java library for the communication defined in protobuf v3
 - [producer](./producer) - *Service A*, the producer of messages to be consumed. Produces a message each second
 - [consumer](./consumer) - *Service B*, the consumer for the messages produced by *Service A*
+
+## Considerations
+
+Chose to go with *gRPC* and *Flow*, since I haven't used them before, and I wanted to learn
+
+Some of the configurations are kept rather minimal, e.g, there's no configuration for the port.
+This in part is due to the solution being designed for containers.
+Port configuration in that case is only relevant for local development (ports can easily be remapped per need in containers).
+
+This solution simulates a large part of an CI/CD pipeline, however omitting the CD part.
+The setup runs through a simple security scan - and allowed me to show off a private GitHub action for building and scanning docker containers.
+
+Currently there's no fault tolerance apart from gRPC offers out of the box.
+This could include retry logic with a backoff, having data caps etc.

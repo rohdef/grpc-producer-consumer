@@ -7,3 +7,6 @@ services:
     build: ./consumer
     environment:
       PRODUCER_HOST: producer
+    depends_on:
+      producer:
+        condition: service_started
