@@ -1,5 +1,5 @@
 name: Building and distributing Danske Bansk services
-run-name: rfbpa - ${{ github.actor }} on ${{ github.ref }}
+run-name: gRPC publisher and consumer - ${{ github.actor }} on ${{ github.ref }}
 on: [ push ]
 
 jobs:
